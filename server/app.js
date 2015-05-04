@@ -10,6 +10,9 @@ var users = require('./routes/users');
 
 var app = express();
 
+var server = require('http').createServer(app);
+var io = require('socket.io').listen(server);
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
@@ -54,6 +57,15 @@ app.use(function(err, req, res, next) {
     message: err.message,
     error: {}
   });
+});
+
+//connect socket.io to the server
+server.listen(app.get('port'), function() {
+	console.log('Express server listening on port ' + app.get('port'));
+});
+
+io.sockets.on('connection', function(socket) {
+	console.log('socket.io started');
 });
 
 
