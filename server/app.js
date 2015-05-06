@@ -6,12 +6,14 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
 var routes = require('./routes/index');
-var users = require('./routes/users');
+var services = require('./routes/services');
 
 var app = express();
 
 var server = require('http').createServer(app);
 var io = require('socket.io').listen(server);
+
+var discovered_services = [];
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -25,8 +27,14 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Make discovered services accessible to the router
+app.use(function(req,res,next) {
+   req.discovered_services = discovered_services;
+   next();
+});
+
 app.use('/', routes);
-app.use('/users', users);
+app.use('/services', services);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -71,7 +79,7 @@ io.sockets.on('connection', function(socket) {
 
 */
 
-// import the module
+// Import mdns  module
 var mdns = require('mdns');
 
 // advertise a http server on port 4321
@@ -82,11 +90,17 @@ ad.start();
 var browser = mdns.createBrowser(mdns.tcp('http'));
 browser.on('serviceUp', function(service) {
   console.log("service up: ", service);
+  discovered_services.push(service);
 });
 browser.on('serviceDown', function(service) {
   console.log("service down: ", service);
+  discovered_services = discovered_services.filter(function (aService) {
+		return aService.fullname !== service.fullname;	
+		});
 });
+
 browser.start();
 
-
 module.exports = app;
+
+
