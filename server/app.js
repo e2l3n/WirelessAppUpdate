@@ -6,14 +6,14 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
 var routes = require('./routes/index');
-var services = require('./routes/services');
+var clients = require('./routes/clients');
 
 var app = express();
 
 var server = require('http').createServer(app);
 var io = require('socket.io').listen(server);
 
-var discovered_services = [];
+var discovered_clients = [];
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -29,12 +29,12 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Make discovered services accessible to the router
 app.use(function(req,res,next) {
-   req.discovered_services = discovered_services;
+   req.discovered_clients = discovered_clients;
    next();
 });
 
 app.use('/', routes);
-app.use('/services', services);
+app.use('/clients', clients);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -90,11 +90,11 @@ ad.start();
 var browser = mdns.createBrowser(mdns.tcp('http'));
 browser.on('serviceUp', function(service) {
   console.log("service up: ", service);
-  discovered_services.push(service);
+  discovered_clients.push(service);
 });
 browser.on('serviceDown', function(service) {
   console.log("service down: ", service);
-  discovered_services = discovered_services.filter(function (aService) {
+  discovered_clients = discovered_clients.filter(function (aService) {
 		return aService.fullname !== service.fullname;	
 		});
 });
