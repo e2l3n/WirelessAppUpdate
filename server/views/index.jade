@@ -1,5 +1,21 @@
 extends layout
 
 block content
-  h1= title
-  p Welcome to #{title}
+    h1= title
+    p WirelessAppUpdate server
+
+    // Wrapper
+    #wrapper
+
+        // SERVICES LIST
+        h2 Discovered services
+        #services
+            table
+                thead
+                    th name
+                    th ip
+                    th port
+                tbody
+        // /SERVICES LIST
+
+    // /WRAPPER

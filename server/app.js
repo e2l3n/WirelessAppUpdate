@@ -60,6 +60,7 @@ app.use(function(err, req, res, next) {
 });
 
 //connect socket.io to the server
+/*
 server.listen(app.get('port'), function() {
 	console.log('Express server listening on port ' + app.get('port'));
 });
@@ -67,6 +68,25 @@ server.listen(app.get('port'), function() {
 io.sockets.on('connection', function(socket) {
 	console.log('socket.io started');
 });
+
+*/
+
+// import the module
+var mdns = require('mdns');
+
+// advertise a http server on port 4321
+var ad = mdns.createAdvertisement(mdns.tcp('http'), 4321);
+ad.start();
+
+// watch all http servers
+var browser = mdns.createBrowser(mdns.tcp('http'));
+browser.on('serviceUp', function(service) {
+  console.log("service up: ", service);
+});
+browser.on('serviceDown', function(service) {
+  console.log("service down: ", service);
+});
+browser.start();
 
 
 module.exports = app;
