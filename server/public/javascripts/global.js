@@ -20,7 +20,7 @@ function displayClients() {
             tableContent += '<tr>';
             tableContent += '<td><a href="#" class="linkshowuser" rel="' + this.name + '">' + this.name + '</a></td>';
             tableContent += '<td>' + this.addresses[0] + '</td>';
-            tableContent += '<td><a href="#" class="linkdeleteuser" rel="' + this.interfaceIndex + '">' + this.port + '</a></td>';
+            tableContent += '<td>' + this.port + '</td>';
             tableContent += '</tr>';
         });
 
