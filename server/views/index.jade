@@ -18,4 +18,24 @@ block content
                 tbody
         // /CLIENTS LIST
 
+        // CLIENT INFO
+        #clientInfo
+            h2 Client Details
+            p
+                strong Fullname:
+                |  <span id='clientInfoFullname'></span>
+                br
+                strong Host:
+                |  <span id='clientInfoHost'></span>
+                br
+                strong IP:
+                |  <span id='clientInfoIP'></span>
+                br
+                strong Port:
+                |  <span id='clientInfoPort'></span>
+        // /CLIENT INFO
+        button(class="btn", data-action="update").
+          Update
+        button(class="btn", data-action="refresh").
+          Refresh
     // /WRAPPER
