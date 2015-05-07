@@ -4,6 +4,7 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var arrayUtils = require('./utilities/array');
 
 var routes = require('./routes/index');
 var clients = require('./routes/clients');
@@ -90,14 +91,19 @@ ad.start();
 var browser = mdns.createBrowser(mdns.tcp('http'));
 browser.on('serviceUp', function(service) {
   console.log("service up: ", service);
-  discovered_clients.push(service);
+  discovered_clients.pushIfNotExist(service, function(existingElem) { 
+    return existingElem.name === service.name; 
 });
+});
+
 browser.on('serviceDown', function(service) {
   console.log("service down: ", service);
   discovered_clients = discovered_clients.filter(function (aService) {
 		return aService.fullname !== service.fullname;	
 		});
 });
+
+	
 
 browser.start();
 
