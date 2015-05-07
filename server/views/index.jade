@@ -4,8 +4,8 @@ block content
     h1= title
     p A node.js application that exposes a REST API and sends commands to clients.
 
-    // Wrapper
-    #wrapper
+    // WRAPPER-LEFT
+    #wrapper-left
 
         // CLIENTS LIST
         h2 Discovered clients
@@ -17,10 +17,14 @@ block content
                     th port
                 tbody
         // /CLIENTS LIST
-
+    // /WRAPPER-LEFT
+    
+    // WRAPPER-RIGHT
+    #wrapper-right
         // CLIENT INFO
         #clientInfo
-            h2 Client Details
+            h3 Client Details
+            i Establishing connection ...
             p
                 strong Fullname:
                 |  <span id='clientInfoFullname'></span>
@@ -38,4 +42,4 @@ block content
           Update
         button(class="btn", data-action="refresh").
           Refresh
-    // /WRAPPER
+    // /WRAPPER-RIGHT

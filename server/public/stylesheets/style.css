@@ -7,14 +7,27 @@ h2
 {
 	margin: 0 0 .5em 0;
 }
+h4
+{
+	margin: 0 0 .5em 0;
+}
 a
 {
 	color: #00B7FF;
 }
-#wrapper
+#wrapper-left
 {
-	padding-left: 20px;
+	padding-left: 0px;
+	float: left;
 	position: relative;
+	width:50%;
+}
+#wrapper-right
+{
+	padding-left: 0px;
+	float: left;
+	position: relative;
+	width:50%;
 }
 #clientList
 {
@@ -49,7 +62,7 @@ a
 #clientInfo
 {
      position: relative;
-     width: 50%;
+     width: 80%;
 
 }
 #clientInfo p
