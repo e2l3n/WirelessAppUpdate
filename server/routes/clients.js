@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 
 /*
- * GET discovered clients.
+	GET discovered clients.
 */
 router.get('/discovered', function(req, res) {
 	//if (req.discovered_clients) {

@@ -11,9 +11,6 @@ var clients = require('./routes/clients');
 
 var app = express();
 
-var server = require('http').createServer(app);
-var io = require('socket.io').listen(server);
-
 var discovered_clients = [];
 
 // view engine setup

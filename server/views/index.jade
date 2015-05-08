@@ -24,7 +24,7 @@ block content
         // CLIENT INFO
         #clientInfo
             h3 Client Details
-            i Establishing connection ...
+            i#status
             p
                 strong Fullname:
                 |  <span id='clientInfoFullname'></span>
@@ -38,8 +38,10 @@ block content
                 strong Port:
                 |  <span id='clientInfoPort'></span>
         // /CLIENT INFO
-        button(class="btn", data-action="update").
+        button(id="connect", data-action="connect" disabled).
+          Connect
+        button(id="update", data-action="update" disabled).
           Update
-        button(class="btn", data-action="refresh").
+        button(id="refresh", data-action="refresh" disabled).
           Refresh
     // /WRAPPER-RIGHT
