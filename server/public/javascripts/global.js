@@ -1,4 +1,3 @@
-var socket_io = require("../app").socket_io;
 var availableClients = [];
 /* 
 	DOM Ready
