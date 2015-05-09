@@ -16,8 +16,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'controllers')));
 
-var server = require('http').Server(app);
-var io = require('socket.io')(server);
+
 var explorer = require('./controllers/explorer');
 explorer.startBrowsing();
 // view engine setup
@@ -63,18 +62,5 @@ app.use(function(err, req, res, next) {
     error: {}
   });
 });
-
-//connect socket.io to the server
-/*
-server.listen(app.get('port'), function() {
-	console.log('Express server listening on port ' + app.get('port'));
-});
-
-io.sockets.on('connection', function(socket) {
-	console.log('socket.io started');
-});
-
-*/
-
 
 module.exports = app;
