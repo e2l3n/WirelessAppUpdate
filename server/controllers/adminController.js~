@@ -6,6 +6,7 @@ var availableClients = [];
 $(document).ready(function() {
     // Client details link click
     $('#clientList table tbody').on('click', 'td a.linkshowdetails', showClientInfo);
+   // $('#update').on('click', updateClient);
     // Populate the clients table on initial page load
     displayClients();
     //Connect on click event hadler
@@ -13,7 +14,7 @@ $(document).ready(function() {
 });
 
 /* 
-	Functions
+	FUNCTIONS
 */
 
 // Fill table with data
@@ -53,18 +54,48 @@ function showClientInfo(event) {
     $('#clientInfoHost').text(thisClientObject.host);
     $('#clientInfoIP').text(thisClientObject.addresses[0]);
     $('#clientInfoPort').text('' + thisClientObject.port);
-
     $("#connect").prop("disabled",false);
 };
 
-//Establish connection
+//Establish socket connection
 function establishConnection() {
    $('#status').text('Establishing connection ...');
+   $("#htmlInputArea").prop("disabled",false);//testing purposes only
+   /*
+   	$('#status').text('Connected.');//$('#status').text('Failed to connect.');
+   	
+   	$("#update").prop("disabled",false);
+   	$("#refresh").prop("disabled",false);
+   */
 };
 
 /* 
-	Utilities
+	USER-EVENT HANDLERS
 */
+
+
+//Notifiy client that new content is available by sending command
+//via the established socket connection and triggering update request on the client side.
+$('button#update').click(function() {
+    var htmlToPost = $('textarea#htmlInputArea').val();
+    if (!htmlToPost)  {
+	window.alert('There is no HTML content to post. Please input and try again.');
+    return;
+    }
+    
+    window.alert(htmlToPost);
+});
+
+//Enable/Disable buttons on textarea input change event
+$('textarea#htmlInputArea').on('keyup',function() {
+    var textarea_value = $("#htmlInputArea").val();
+    if(textarea_value != '') {
+        $('button#update').attr('disabled' , false);
+    }else{
+        $('button#update').attr('disabled' , true);
+    }
+});
+
 
 
 

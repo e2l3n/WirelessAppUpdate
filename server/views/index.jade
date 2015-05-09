@@ -23,7 +23,7 @@ block content
     #wrapper-right
         // CLIENT INFO
         #clientInfo
-            h3 Client Details
+            h2 Client Details
             i#status
             p
                 strong Fullname:
@@ -38,11 +38,8 @@ block content
                 strong Port:
                 |  <span id='clientInfoPort'></span>
         // /CLIENT INFO
-        button(id='connect', data-action='connect' disabled).
-          Connect
-        button(id='update', data-action='update' disabled).
-          Update
-        button(id='refresh', data-action='refresh' disabled).
-          Refresh   
+        button#connect(data-action='connect' disabled) Connect
+        button#update(data-action='update' disabled) Update
+        button#refresh(data-action='refresh' disabled) Refresh          
         textarea(id='htmlInputArea', placeholder='Type here the HTML content to post.' disabled)
     // /WRAPPER-RIGHT
