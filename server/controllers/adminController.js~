@@ -80,20 +80,10 @@ $('button#update').click(function() {
     var htmlToPost = $('textarea#htmlInputArea').val();
     if (!htmlToPost)  {
 	window.alert('There is no HTML content to post. Please input and try again.');
-    return;
+    	return;
     }
     
     window.alert(htmlToPost);
-});
-
-//Enable/Disable buttons on textarea input change event
-$('textarea#htmlInputArea').on('keyup',function() {
-    var textarea_value = $("#htmlInputArea").val();
-    if(textarea_value != '') {
-        $('button#update').attr('disabled' , false);
-    }else{
-        $('button#update').attr('disabled' , true);
-    }
 });
 
 

@@ -99,7 +99,7 @@ $('textarea#htmlInputArea').on('keyup',function() {
 //Trigger refresh on the client side
 $('button#refresh').click(function() {
 
-}
+});
 
 
 
