@@ -4,7 +4,7 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-var arrayUtils = require('./utilities/array');
+var arrayUtils = require('./controllers/utilities/array');
 
 var routes = require('./routes/index');
 var clients = require('./routes/clients');
@@ -12,6 +12,8 @@ var clients = require('./routes/clients');
 var app = express();
 
 var discovered_clients = [];
+var server = require('http').Server(app);
+var io = require('socket.io')(server);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -24,6 +26,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'controllers')));
 
 // Make discovered services accessible to the router
 app.use(function(req,res,next) {
@@ -81,8 +84,8 @@ io.sockets.on('connection', function(socket) {
 var mdns = require('mdns');
 
 // advertise a http server on port 4321
-//var ad = mdns.createAdvertisement(mdns.tcp('http'), 4321);
-//ad.start();
+var ad = mdns.createAdvertisement(mdns.tcp('http'), 4321);
+ad.start();
 
 // watch all http servers
 var browser = mdns.createBrowser(mdns.tcp('http'));

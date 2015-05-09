@@ -1,5 +1,3 @@
-var socket_io = require('socket.io');
-
 var availableClients = [];
 /* 
 	DOM Ready
