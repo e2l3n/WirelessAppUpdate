@@ -1,5 +1,9 @@
 var discovered_clients = [];
 var arrayUtils = require('./utilities/array');
+var stringUtils = require('./utilities/string');
+var constants = {
+    'kServicePrefix': 'e2l3n'
+};
 
 // Import mdns  module
 var mdns = require('mdns');
@@ -9,27 +13,27 @@ ad.start();
 // watch available services
 var browser = mdns.createBrowser(mdns.tcp('http'));
 browser.on('serviceUp', function(service) {
-  console.log("service up: ", service);
-  discovered_clients.pushIfNotExist(service, function(existingElem) { 
-    return existingElem.name === service.name; 
-});
+    console.log("service up: ", service);
+    if (!service.name.hasPrefix(constants.kServicePrefix)) {
+        return;
+    }
+    discovered_clients.pushIfNotExist(service, function(existingElem) {
+        return existingElem.name === service.name;
+    });
 });
 browser.on('serviceDown', function(service) {
-  console.log("service down: ", service);
-  discovered_clients = discovered_clients.filter(function (aService) {
-		return aService.fullname !== service.fullname;	
-		});
+    console.log("service down: ", service);
+    discovered_clients = discovered_clients.filter(function(aService) {
+        return aService.fullname !== service.fullname;
+    });
 });
 
-
+//Public methods
 module.exports = {
-  startBrowsing: function () {
-     browser.start();
- },
- discovered_clients: function () {
-     return discovered_clients;
- } 
+    startBrowsing: function() {
+        browser.start();
+    },
+    discovered_clients: function() {
+        return discovered_clients;
+    }
 };
-
-
-

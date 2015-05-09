@@ -24,8 +24,6 @@ explorer.startBrowsing();
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
-
-
 // Make discovered services accessible to the router
 app.use(function(req,res,next) {
    req.discovered_clients = explorer.discovered_clients();
