@@ -71,9 +71,9 @@ a
 	border: 1px solid #CCC;
 	padding: 15px;
 }
-fieldset
+#htmlInputArea 
 {
-	border: 0;
-	margin: 0;
-	padding: 0;
+	width: 100%;
+	position: relative;
+	min-height: 200px;
 }
