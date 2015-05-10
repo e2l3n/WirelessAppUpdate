@@ -6,7 +6,7 @@ var availableClients = [];
 $(document).ready(function() {
     // Client details link click
     $('#clientList table tbody').on('click', 'td a.linkshowdetails', showClientInfo);
-   // $('#update').on('click', updateClient);
+    // $('#update').on('click', updateClient);
     // Populate the clients table on initial page load
     displayClients();
     //Connect on click event hadler
@@ -22,10 +22,10 @@ function displayClients() {
     // Empty content string
     var htmlContent = '';
     // jQuery AJAX call for JSON
-    $.getJSON( '/clients/discovered', function( data ) {
-	availableClients = data;
+    $.getJSON('/clients/discovered', function(data) {
+        availableClients = data;
         // For each item in JSON, add a table row and cells to the content string
-        $.each(data, function(){
+        $.each(data, function() {
             htmlContent += '<tr>';
             htmlContent += '<td><a href="#" class="linkshowdetails" rel="' + this.addresses[0] + '">' + this.name + '</a></td>';
             htmlContent += '<td>' + this.addresses[0] + '</td>';
@@ -46,7 +46,9 @@ function showClientInfo(event) {
     // Retrieve ip address from link rel attribute
     var thisIPAddress = $(this).attr('rel');
     // Get index of object based on id value
-    var arrayPosition = availableClients.map(function(arrayItem) { return arrayItem.addresses[0]; }).indexOf(thisIPAddress);
+    var arrayPosition = availableClients.map(function(arrayItem) {
+        return arrayItem.addresses[0];
+    }).indexOf(thisIPAddress);
     // Get client object
     var thisClientObject = availableClients[arrayPosition];
     //Populate info box
@@ -54,19 +56,19 @@ function showClientInfo(event) {
     $('#clientInfoHost').text(thisClientObject.host);
     $('#clientInfoIP').text(thisClientObject.addresses[0]);
     $('#clientInfoPort').text('' + thisClientObject.port);
-    $("#connect").prop("disabled",false);
+    $("#connect").prop("disabled", false);
 };
 
 //Establish socket connection
 function establishConnection() {
-   $('#status').text('Establishing connection ...');
-   $("#htmlInputArea").prop("disabled",false);//testing purposes only
-   /*
-   	$('#status').text('Connected.');//$('#status').text('Failed to connect.');
-   	
-   	$("#update").prop("disabled",false);
-   	$("#refresh").prop("disabled",false);
-   */
+    $('#status').text('Establishing connection ...');
+    $("#htmlInputArea").prop("disabled", false); //testing purposes only
+    /*
+    	$('#status').text('Connected.');//$('#status').text('Failed to connect.');
+    	
+    	$("#update").prop("disabled",false);
+    	$("#refresh").prop("disabled",false);
+    */
 };
 
 /* 
@@ -78,21 +80,21 @@ function establishConnection() {
 //via the established socket connection and triggering update request on the client side.
 $('button#update').click(function() {
     var htmlToPost = $('textarea#htmlInputArea').val();
-    if (!htmlToPost)  {
-	window.alert('There is no HTML content to post. Please input and try again.');
-    	return;
+    if (!htmlToPost) {
+        window.alert('There is no HTML content to post. Please input and try again.');
+        return;
     }
-    
+
     window.alert(htmlToPost);
 });
 
 //Enable/Disable buttons on textarea input change event
-$('textarea#htmlInputArea').on('keyup',function() {
+$('textarea#htmlInputArea').on('keyup', function() {
     var textarea_value = $("#htmlInputArea").val();
     if (textarea_value != '') {
-        $('button#update').attr('disabled' , false);
+        $('button#update').attr('disabled', false);
     } else {
-        $('button#update').attr('disabled' , true);
+        $('button#update').attr('disabled', true);
     }
 });
 
@@ -100,10 +102,3 @@ $('textarea#htmlInputArea').on('keyup',function() {
 $('button#refresh').click(function() {
 
 });
-
-
-
-
-
-
-

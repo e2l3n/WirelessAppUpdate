@@ -1,5 +1,5 @@
 # WirelessAppUpdate
-by [Toma Popov] (https://github.com/e2l3n/WirelessAppUpdate)
+by [Toma Todorov] (https://github.com/e2l3n/WirelessAppUpdate)
 
 ## Index
 
