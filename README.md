@@ -16,7 +16,7 @@ A hybrid mobile application (created via Apache Cordova) that hosts a simple HTM
 Upon start the app broadcasts its presence using the native mDNS service and advertises itses as a service . The app then starts listening on specific port for socket connections initiated by the server.
 
 ###Server side
-The server is an <i>express</i> app which which exposes REST API and provides a simple UI built with <i>jade</i> framework for sending commands to clients. Upon start the server begings browsing all services on the local network and lists all available clients. 
+The server is an <i>express</i> app which exposes REST API and provides a simple UI built with <i>jade</i> framework for sending commands to clients. Upon start the server begings browsing all services on the local network and lists all available clients. 
 <br>The REST API has the following routes:
 * /update - updates the index.html page of the mobile app with the posted content</i>
 * /refresh - refreshes the web view in order to see the updated content</i>
