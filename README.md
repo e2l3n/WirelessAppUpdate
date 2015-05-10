@@ -1,7 +1,7 @@
 # WirelessAppUpdate
 by [Toma Popov] (https://github.com/e2l3n/WirelessAppUpdate)
 
-## 0. Index
+## Index
 
 1. [Description](#1-description)
 2. [Setup and Installation](#2-Setup and Installation)
@@ -13,7 +13,8 @@ A client-server architecture that allows clients to be refreshed upon command se
 ###Client side (mobile app)
 A hybrid mobile application (created via Apache Cordova) that hosts a simple HTML page. Part of the client side code is abstracted in a reusable cordova plugin.
 * Compatible with [Cordova Plugman](https://github.com/apache/cordova-plugman).
-Upon start the app broadcasts its presence using the native mDNS service and advertises itses as a service . HTe application then starts listening on specific port for socket initiated by the server.
+Upon start the app broadcasts its presence using the native mDNS service and advertises itses as a service . The app then starts listening on specific port for socket connections initiated by the server.
+
 ###Server side
 The server is an <i>express</i> app which which exposes REST API and provides a simple UI built with <i>jade</i> framework for sending commands to clients. Upon start the server begings browsing all services on the local network and lists all available clients. 
 <br>The REST API has the following routes:
