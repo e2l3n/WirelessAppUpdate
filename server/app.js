@@ -5,8 +5,15 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var routes = require('./routes/index');
-var clients = require('./routes/clients');
+var api = require('./routes/api/v1');
+var express = require('express');
+var http = require('http');
 var app = express();
+var server = http.createServer(app);
+var ip = require("ip");
+var webSocket = require('ws');
+server.listen(3001);
+
 // uncomment after placing your favicon in /public
 //app.use(favicon(__dirname + '/public/favicon.ico'));
 app.use(logger('dev'));
@@ -16,21 +23,23 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'controllers')));
 
-
 var explorer = require('./controllers/explorer');
 explorer.startBrowsing();
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
-// Make discovered services accessible to the router
+// Make locar vars accessible to the router
 app.use(function(req,res,next) {
    req.discovered_clients = explorer.discovered_clients();
+   req.ip = ip.address();
+   req.port = server.address().port;
+   
    next();
 });
 
 app.use('/', routes);
-app.use('/clients', clients);
+app.use('/api/v1', api);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -62,15 +71,6 @@ app.use(function(err, req, res, next) {
     error: {}
   });
 });
-/*
-var WebSocket = require('ws')
-  , ws = new WebSocket('ws://[fe80::cae0:ebff:fe3f:1153]:4567');
-ws.on('open', function() {
-    //ws.send('something');
-});
-ws.on('message', function(message) {
-    console.log('received: %s', message);
-});
-*/
+
 
 module.exports = app;

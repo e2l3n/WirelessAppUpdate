@@ -9,8 +9,6 @@ $(document).ready(function() {
     // $('#update').on('click', updateClient);
     // Populate the clients table on initial page load
     displayClients();
-    //Connect on click event hadler
-    $('#connect').on('click', establishConnection);
 });
 
 /* 
@@ -22,7 +20,7 @@ function displayClients() {
     // Empty content string
     var htmlContent = '';
     // jQuery AJAX call for JSON
-    $.getJSON('/clients/discovered', function(data) {
+    $.getJSON('/api/v1/discovered', function(data) {
         availableClients = data;
         // For each item in JSON, add a table row and cells to the content string
         $.each(data, function() {
@@ -59,22 +57,9 @@ function showClientInfo(event) {
     $("#connect").prop("disabled", false);
 };
 
-//Establish socket connection
-function establishConnection() {
-    $('#status').text('Establishing connection ...');
-    $("#htmlInputArea").prop("disabled", false); //testing purposes only
-    /*
-    	$('#status').text('Connected.');//$('#status').text('Failed to connect.');
-    	
-    	$("#update").prop("disabled",false);
-    	$("#refresh").prop("disabled",false);
-    */
-};
-
 /* 
 	USER-EVENT HANDLERS
 */
-
 
 //Notifiy client that new content is available by sending command
 //via the established socket connection and triggering update request on the client side.
@@ -101,4 +86,16 @@ $('textarea#htmlInputArea').on('keyup', function() {
 //Trigger refresh on the client side
 $('button#refresh').click(function() {
 
+});
+
+//Trigger socket connection
+$('button#connect').click(function() {
+    $('#status').text('Establishing connection ...');
+    $("#htmlInputArea").prop("disabled", false); //testing purposes only
+    /*
+    	$('#status').text('Connected.');//$('#status').text('Failed to connect.');
+    	
+    	$("#update").prop("disabled",false);
+    	$("#refresh").prop("disabled",false);
+    */
 });

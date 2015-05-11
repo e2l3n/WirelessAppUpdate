@@ -8,8 +8,8 @@ var constants = {
 // Import mdns  module
 var mdns = require('mdns');
 // advertise a http server on port 4321
-var ad = mdns.createAdvertisement(mdns.tcp('http'), 4321);
-ad.start();
+//var ad = mdns.createAdvertisement(mdns.tcp('http'), 4321);
+//ad.start();
 // watch available services
 var browser = mdns.createBrowser(mdns.tcp('http'));
 browser.on('serviceUp', function(service) {

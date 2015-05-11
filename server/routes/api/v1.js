@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-
+var WebSocket = require('ws');
 /*
 	GET discovered clients.
 */
