@@ -1,9 +1,7 @@
 var discovered_clients = [];
 var arrayUtils = require('./utilities/array');
 var stringUtils = require('./utilities/string');
-var constants = {
-    'kServicePrefix': ''
-};
+var constants = require('./utilities/constants'); 
 
 // Import mdns  module
 var mdns = require('mdns');

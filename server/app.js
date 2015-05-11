@@ -12,7 +12,8 @@ var app = express();
 var server = http.createServer(app);
 var ip = require("ip");
 var webSocket = require('ws');
-server.listen(3001);
+var constants = require('./controllers/utilities/constants'); 
+server.listen(constants.kServerPort);
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(__dirname + '/public/favicon.ico'));
@@ -29,7 +30,7 @@ explorer.startBrowsing();
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
-// Make locar vars accessible to the router
+// Make local vars accessible to the router
 app.use(function(req,res,next) {
    req.discovered_clients = explorer.discovered_clients();
    req.ip = ip.address();
