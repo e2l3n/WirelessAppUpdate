@@ -2,7 +2,7 @@ var discovered_clients = [];
 var arrayUtils = require('./utilities/array');
 var stringUtils = require('./utilities/string');
 var constants = {
-    'kServicePrefix': 'e2l3n'
+    'kServicePrefix': ''
 };
 
 // Import mdns  module
@@ -17,10 +17,32 @@ browser.on('serviceUp', function(service) {
     if (!service.name.hasPrefix(constants.kServicePrefix)) {
         return;
     }
+
+    var filteredIP4Addresses = service.addresses.filter(function(ipAddr) {
+        var octets = ipAddr.split(".");
+        var block;
+        var regex = new RegExp('^[0-9]{1,3}$');
+        for (var i = 0; i < octets.length; i++) {
+            block = octets[i];
+            if (!regex.test(block)) {
+                return false;
+            }
+        }
+
+        return true;
+    });
+
+    if (filteredIP4Addresses.length > 0) {
+        service.addresses = filteredIP4Addresses;
+    }
+
     discovered_clients.pushIfNotExist(service, function(existingElem) {
         return existingElem.name === service.name;
     });
+
+
 });
+
 browser.on('serviceDown', function(service) {
     console.log("service down: ", service);
     discovered_clients = discovered_clients.filter(function(aService) {

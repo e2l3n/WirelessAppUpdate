@@ -62,5 +62,15 @@ app.use(function(err, req, res, next) {
     error: {}
   });
 });
+/*
+var WebSocket = require('ws')
+  , ws = new WebSocket('ws://[fe80::cae0:ebff:fe3f:1153]:4567');
+ws.on('open', function() {
+    //ws.send('something');
+});
+ws.on('message', function(message) {
+    console.log('received: %s', message);
+});
+*/
 
 module.exports = app;
