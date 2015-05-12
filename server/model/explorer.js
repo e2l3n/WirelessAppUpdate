@@ -1,7 +1,7 @@
 var discovered_clients = [];
-var arrayUtils = require('./utilities/array');
-var stringUtils = require('./utilities/string');
-var constants = require('./utilities/constants'); 
+var arrayUtils = require('./helpers/array');
+var stringUtils = require('./helpers/string');
+var constants = require('./constants');
 
 // Import mdns  module
 var mdns = require('mdns');

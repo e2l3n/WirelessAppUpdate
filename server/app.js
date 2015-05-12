@@ -1,17 +1,16 @@
 var express = require('express');
 var path = require('path');
-var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var routes = require('./routes/index');
 var api = require('./routes/api/v1');
-var express = require('express');
 var http = require('http');
 var app = express();
 var server = http.createServer(app);
 var ip = require("ip");
-var constants = require('./controllers/utilities/constants'); 
+var constants = require('./model/constants'); 
+var explorer = require('./model/explorer');
 server.listen(constants.kServerPort);
 
 // uncomment after placing your favicon in /public
@@ -22,8 +21,9 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'controllers')));
+app.use(express.static(path.join(__dirname, 'model')));
 
-var explorer = require('./controllers/explorer');
+
 explorer.startBrowsing();
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
