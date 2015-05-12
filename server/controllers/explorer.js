@@ -5,8 +5,8 @@ var constants = require('./utilities/constants');
 
 // Import mdns  module
 var mdns = require('mdns');
-// advertise a http server on port 4321
-//var ad = mdns.createAdvertisement(mdns.tcp('http'), 4321);
+// advertise the server /testing purposes only/
+//var ad = mdns.createAdvertisement(mdns.tcp('http'), constants.kServerPort);
 //ad.start();
 // watch available services
 var browser = mdns.createBrowser(mdns.tcp('http'));

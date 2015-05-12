@@ -11,7 +11,6 @@ var http = require('http');
 var app = express();
 var server = http.createServer(app);
 var ip = require("ip");
-var webSocket = require('ws');
 var constants = require('./controllers/utilities/constants'); 
 server.listen(constants.kServerPort);
 

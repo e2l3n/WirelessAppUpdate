@@ -6,7 +6,6 @@ var availableClients = [];
 $(document).ready(function() {
     // Client details link click
     $('#clientList table tbody').on('click', 'td a.linkshowdetails', showClientInfo);
-    // $('#update').on('click', updateClient);
     // Populate the clients table on initial page load
     displayClients();
 });
@@ -54,7 +53,13 @@ function showClientInfo(event) {
     $('#clientInfoHost').text(thisClientObject.host);
     $('#clientInfoIP').text(thisClientObject.addresses[0]);
     $('#clientInfoPort').text('' + thisClientObject.port);
-    $("#connect").prop("disabled", false);
+    //Update buttons state appropriately.
+	$("#connect").prop("disabled", false);
+	$("#htmlInputArea").prop("disabled", true);
+    $("#update").prop("disabled", true);
+    $("#refresh").prop("disabled", true);
+	
+	$('#status').text('');
 };
 
 /* 
@@ -76,7 +81,7 @@ $('button#update').click(function() {
 //Enable/Disable buttons on textarea input change event
 $('textarea#htmlInputArea').on('keyup', function() {
     var textarea_value = $("#htmlInputArea").val();
-    if (textarea_value != '') {
+    if (textarea_value.length) {
         $('button#update').attr('disabled', false);
     } else {
         $('button#update').attr('disabled', true);
@@ -91,11 +96,9 @@ $('button#refresh').click(function() {
 //Trigger socket connection
 $('button#connect').click(function() {
     $('#status').text('Establishing connection ...');
-    $("#htmlInputArea").prop("disabled", false); //testing purposes only
-    /*
-    	$('#status').text('Connected.');//$('#status').text('Failed to connect.');
-    	
-    	$("#update").prop("disabled",false);
-    	$("#refresh").prop("disabled",false);
-    */
+    $.getJSON('/api/v1/connect', function(data) {
+    	$('#status').text('Connected.');
+		$("#htmlInputArea").prop("disabled", false);
+	    $("#refresh").prop("disabled", false);
+    });
 });
