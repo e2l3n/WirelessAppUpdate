@@ -11,10 +11,8 @@ var server = http.createServer(app);
 var ip = require("ip");
 var constants = require('./model/constants'); 
 var explorer = require('./model/explorer');
-server.listen(constants.kServerPort);
 
-// uncomment after placing your favicon in /public
-//app.use(favicon(__dirname + '/public/favicon.ico'));
+server.listen(constants.kServerPort);
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -23,7 +21,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'controllers')));
 app.use(express.static(path.join(__dirname, 'model')));
 
-
+//Start browsing for advertised services over the LAN
 explorer.startBrowsing();
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
