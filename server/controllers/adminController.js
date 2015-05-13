@@ -22,9 +22,9 @@ function displayClients() {
         type: 'GET',
         url: '/api/v1/discovered'
     }).done(function(response) {
-        availableClients = response;
+        availableClients = response.result;
         // For each item in JSON, add a table row and cells to the content string
-        $.each(response, function() {
+        $.each(response.result, function() {
             htmlContent += '<tr>';
             htmlContent += '<td><a href="#" class="linkshowdetails" rel="' + this.addresses[0] + '">' + this.name + '</a></td>';
             htmlContent += '<td>' + this.addresses[0] + '</td>';
