@@ -19,12 +19,11 @@ function displayClients() {
     // Empty content string
     var htmlContent = '';
     $.ajax({
-            type: 'GET',
-             url: '/api/v1/discovered'
-	//dataType: 'json'
-        }).done(function(response) {
+        type: 'GET',
+        url: '/api/v1/discovered'
+    }).done(function(response) {
         availableClients = response;
-       	// For each item in JSON, add a table row and cells to the content string
+        // For each item in JSON, add a table row and cells to the content string
         $.each(response, function() {
             htmlContent += '<tr>';
             htmlContent += '<td><a href="#" class="linkshowdetails" rel="' + this.addresses[0] + '">' + this.name + '</a></td>';
@@ -35,8 +34,8 @@ function displayClients() {
 
         // Inject the whole content string into our existing HTML table
         $('#clientList table tbody').html(htmlContent);
-        });
-	
+    });
+
 
     $("#connect").prop("disabled", true);
 };
@@ -59,12 +58,12 @@ function showClientInfo(event) {
     $('#clientInfoIP').text(thisClientObject.addresses[0]);
     $('#clientInfoPort').text('' + thisClientObject.port);
     //Update buttons state appropriately.
-	$("#connect").prop("disabled", false);
-	$("#htmlInputArea").prop("disabled", true);
-    	$("#update").prop("disabled", true);
-        $("#refresh").prop("disabled", true);
-	
-	$('#status').text('');
+    $("#connect").prop("disabled", false);
+    $("#htmlInputArea").prop("disabled", true);
+    $("#update").prop("disabled", true);
+    $("#refresh").prop("disabled", true);
+
+    $('#status').text('');
 };
 
 /* 
@@ -101,20 +100,20 @@ $('button#refresh').click(function() {
 //Trigger socket connection
 $('button#connect').click(function() {
     $('#status').text('Establishing connection ...');
-	var urlAddr = '/connect/ip/' + $('#clientInfoIP').val() + '/port/' + $('#clientInfoPort').val();
-	$.ajax({
-            type: 'GET',
-            url: urlAddr
-        }).done(function(response) {
-            // Check for a successful (blank) response
-            if (response.error === '') {
-            	$('#status').text('Connected.');
-		$("#htmlInputArea").prop("disabled", false);
-	    	$("#refresh").prop("disabled", false);
-	    } else {
-                $('#status').text('Failed to connect.');
-		$("#htmlInputArea").prop("disabled", true);
-	    	$("#refresh").prop("disabled", true);
-            }
-        });
-});    
+    var urlAddr = '/connect/ip/' + $('#clientInfoIP').val() + '/port/' + $('#clientInfoPort').val();
+    $.ajax({
+        type: 'GET',
+        url: urlAddr
+    }).done(function(response) {
+        // Check for a successful (blank) response
+        if (response.error === '') {
+            $('#status').text('Connected.');
+            $("#htmlInputArea").prop("disabled", false);
+            $("#refresh").prop("disabled", false);
+        } else {
+            $('#status').text('Failed to connect.');
+            $("#htmlInputArea").prop("disabled", true);
+            $("#refresh").prop("disabled", true);
+        }
+    });
+});
