@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var WebSocket = require('ws');
+var constants = require('./constants');
 var ws = null;
 /*
 	GET discovered clients.
@@ -30,17 +31,16 @@ router.get('/connect/ip/:ip/port/:port', function(req, res) {
 
     if (ws && ws.readyState === 1) {
         /*
-		 Immediately terminate the socket connection without informing the
-		 other lister (mobile app) by sending 'close' event. 
-		 The current bussuness logic doesn't impose any actions 
-		 on the client side when the node.js app disconnects. 
-		*/
+	 Immediately terminate the socket connection without informing the
+	 other lister (mobile app) by sending 'close' event. 
+	 The current bussuness logic doesn't impose any actions 
+	 on the client side when the node.js app disconnects. 
+	*/
         ws.terminate();
     }
 
     ws = new WebSocket('ws://' + ip + ':' + port);
     ws.on('open', function() {
-        ws.send('something');
         // console.log('did open');
         res.statusCode = 200;
         res.setHeader('content-type', 'text/html');
@@ -53,12 +53,58 @@ router.get('/connect/ip/:ip/port/:port', function(req, res) {
     });
 });
 
+router.post('/update', function(req, res) {
+    var html = req.body.html;
+
+    if (typeof html !== 'string') {
+        res.statusCode = 400;
+        res.send(generateResponse(null, 'Invalid or missing parameters.'));
+
+        return;
+    }
+
+    if (!ws || ws.readyState !== 1) {
+        res.statusCode = 500;
+        res.send(generateResponse(null, 'No socket connection available.'));
+
+        return;
+    }
+	
+    ws.send(generateCommand(constants.kCommandUpdate, html);
+    ws.on('message', function(error) {
+        res.statusCode = error != null ? 500 : 200;
+        res.send(generateResponse(null, error == null ?: 'Failed send html.'));
+    });
+});
+
+router.get('/refresh', function(req, res) {
+    if (!ws || ws.readyState !== 1) {
+        res.statusCode = 500;
+        res.send(generateResponse(null, 'No socket connection available.'));
+
+        return;
+    }
+	
+    ws.send(generateCommand(constants.kCommandRefresh, null);
+    ws.on('message', function(error) {
+        res.statusCode = error != null ? 500 : 200;
+        res.send(generateResponse(null, error == null ?: 'Failed to send html.'));
+    });
+});
+
 // Utility methods
 
 function generateResponse(result, errorMsg) {
     return {
          error: (typeof errorMsg === 'string') ? errorMsg : '',
         result: result
+    };
+}
+
+function generateCommand(command, payload) {
+    return {
+         command: (typeof command === 'string') ? command : '',
+         payload: payload
     };
 }
 
