@@ -1,7 +1,6 @@
 var express = require('express');
 var router = express.Router();
 var WebSocket = require('ws');
-var constants = require('./constants');
 var ws = null;
 /*
 	GET discovered clients.
@@ -47,7 +46,7 @@ router.get('/connect/ip/:ip/port/:port', function(req, res) {
         res.send(generateResponse(null, ''));
     });
     ws.on('error', function(error) {
-        //console.log('did receive error' + error);
+        // console.log('did receive error' + error);
         res.statusCode = 409;
         res.send(generateResponse(null, 'Did receive error.'));
     });
@@ -55,8 +54,8 @@ router.get('/connect/ip/:ip/port/:port', function(req, res) {
 
 router.post('/update', function(req, res) {
     var html = req.body.html;
-
     if (typeof html !== 'string') {
+        //console.log('400 ');
         res.statusCode = 400;
         res.send(generateResponse(null, 'Invalid or missing parameters.'));
 
@@ -69,11 +68,12 @@ router.post('/update', function(req, res) {
 
         return;
     }
-	
-    ws.send(generateCommand(constants.kCommandUpdate, html);
+
+    ws.send(generateCommand(req.constants.kCommandUpdate, html));
     ws.on('message', function(error) {
+        //console.log('Error is ' + error);
         res.statusCode = error != null ? 500 : 200;
-        res.send(generateResponse(null, error == null ?: 'Failed send html.'));
+        res.send(generateResponse(null, error == null ? error : 'Failed send html.'));
     });
 });
 
@@ -84,11 +84,11 @@ router.get('/refresh', function(req, res) {
 
         return;
     }
-	
-    ws.send(generateCommand(constants.kCommandRefresh, null);
+
+    ws.send(generateCommand(req.constants.kCommandRefresh, null));
     ws.on('message', function(error) {
         res.statusCode = error != null ? 500 : 200;
-        res.send(generateResponse(null, error == null ?: 'Failed to send html.'));
+        res.send(generateResponse(null, error == null ? error : 'Failed to send html.'));
     });
 });
 
@@ -96,16 +96,13 @@ router.get('/refresh', function(req, res) {
 
 function generateResponse(result, errorMsg) {
     return {
-         error: (typeof errorMsg === 'string') ? errorMsg : '',
-        result: result
+        'error': (typeof errorMsg === 'string') ? errorMsg : '',
+        'result': result
     };
 }
 
 function generateCommand(command, payload) {
-    return {
-         command: (typeof command === 'string') ? command : '',
-         payload: payload
-    };
+    return 'command:' + ((typeof command === 'string') ? command : '') + ';payload:' + payload;
 }
 
 module.exports = router;

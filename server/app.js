@@ -32,6 +32,7 @@ app.use(function(req,res,next) {
    req.discovered_clients = explorer.discovered_clients();
    req.ip = ip.address();
    req.port = server.address().port;
+   req.constants = constants;
    
    next();
 });

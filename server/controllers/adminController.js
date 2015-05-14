@@ -18,9 +18,10 @@ $(document).ready(function() {
 function displayClients() {
     // Empty content string
     var htmlContent = '';
+	var urlAddr = '/api/v1/discovered';
     $.ajax({
         type: 'GET',
-        url: '/api/v1/discovered'
+         url: urlAddr
     }).done(function(response) {
         availableClients = response.result;
         // For each item in JSON, add a table row and cells to the content string
@@ -70,16 +71,32 @@ function showClientInfo(event) {
 	USER-EVENT HANDLERS
 */
 
-//Notifiy client that new content is available by sending command
-//via the established socket connection and triggering update request on the client side.
+//Send html content to client.
 $('button#update').click(function() {
     var htmlToPost = $('textarea#htmlInputArea').val();
     if (!htmlToPost) {
         window.alert('There is no HTML content to post. Please input and try again.');
         return;
     }
-
-    window.alert(htmlToPost);
+	
+	    var urlAddr = '/api/v1/update';
+		$.ajax({
+	        type: 'POST',
+	         url: urlAddr,
+			data: { 'html' : $("#htmlInputArea").val() },
+		dataType: 'JSON'
+	    }).done(function(response) {
+	        // Check for a successful (blank) response
+	        if (!response.error || response.error == '') {
+// 				$('#status').text('Connected.');
+// 	            $("#htmlInputArea").prop("disabled", false);
+// 	            $("#refresh").prop("disabled", false);
+	        } else {
+	            // $('#status').text('Failed to connect.');
+	            // $("#htmlInputArea").prop("disabled", true);
+	            // $("#refresh").prop("disabled", true);
+	        }
+	    });
 });
 
 //Enable/Disable buttons on textarea input change event
@@ -92,21 +109,16 @@ $('textarea#htmlInputArea').on('keyup', function() {
     }
 });
 
-//Trigger refresh on the client side
-$('button#refresh').click(function() {
-
-});
-
 //Trigger socket connection
 $('button#connect').click(function() {
     $('#status').text('Establishing connection ...');
-    var urlAddr = '/connect/ip/' + $('#clientInfoIP').val() + '/port/' + $('#clientInfoPort').val();
-    $.ajax({
+    var urlAddr = '/api/v1/connect/ip/' + $('#clientInfoIP').text() + '/port/' + $('#clientInfoPort').text();
+	$.ajax({
         type: 'GET',
         url: urlAddr
     }).done(function(response) {
         // Check for a successful (blank) response
-        if (response.error === '') {
+        if (!response.error || response.error == '') {
             $('#status').text('Connected.');
             $("#htmlInputArea").prop("disabled", false);
             $("#refresh").prop("disabled", false);
