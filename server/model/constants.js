@@ -8,5 +8,5 @@ module.exports = {
 	kServerPort: 3001,
 	kCommandRefresh: 'WAURefresh',
 	kCommandUpdate: 'WAUUpdate',
-	kCommandMessage: 'WAUMessage'
+	kCommandAcknowledge: 'WAUAcknowledge'
 };

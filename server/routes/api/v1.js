@@ -46,7 +46,7 @@ router.get('/connect/ip/:ip/port/:port', function(req, res) {
         res.send(generateResponse(null, ''));
     });
     ws.on('error', function(error) {
-        // console.log('did receive error' + error);
+        console.log('did receive error' + error);
         res.statusCode = 409;
         res.send(generateResponse(null, 'Did receive error.'));
     });

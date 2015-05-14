@@ -44,7 +44,7 @@ browser.on('serviceUp', function(service) {
 browser.on('serviceDown', function(service) {
     console.log("service down: ", service);
     discovered_clients = discovered_clients.filter(function(aService) {
-        return aService.fullname !== service.fullname;
+        return aService.name !== service.name;
     });
 });
 
