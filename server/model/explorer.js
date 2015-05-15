@@ -29,7 +29,7 @@ browser.on('serviceUp', function(service) {
 
         return true;
     });
-	console.log('FILTERED IP Addresses : ' + filteredIP4Addresses);
+	// console.log('FILTERED IP Addresses : ' + filteredIP4Addresses);
     if (filteredIP4Addresses.length > 0) {
         service.addresses = filteredIP4Addresses;
     }
