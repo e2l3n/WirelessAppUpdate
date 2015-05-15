@@ -1,4 +1,4 @@
-// check if an element exists in array using a comparer function
+// check if an element exists in array using a comparer function and return true/false
 // comparer : function(currentElement)
 Array.prototype.inArray = function(comparer) { 
     for(var i=0; i < this.length; i++) { 
@@ -15,3 +15,15 @@ Array.prototype.pushIfNotExist = function(element, comparer) {
     }
 }; 
 
+//Public methods
+module.exports = {
+    findObjectInArray: function(array, comparer) {
+	    for(var i=0; i < array.length; i++) { 
+	        if(comparer(array[i])) {
+	        	return array[i];
+	        } 
+	    }
+	
+	    return null; 
+    }
+};

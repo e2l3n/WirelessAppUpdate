@@ -11,6 +11,7 @@ var server = http.createServer(app);
 var ip = require("ip");
 var constants = require('./model/constants'); 
 var explorer = require('./model/explorer');
+var arrayUtils = require('./model/helpers/array');
 
 server.listen(constants.kServerPort);
 app.use(logger('dev'));
@@ -33,6 +34,7 @@ app.use(function(req,res,next) {
    req.ip = ip.address();
    req.port = server.address().port;
    req.constants = constants;
+   req.arrayUtils = arrayUtils;
    
    next();
 });
