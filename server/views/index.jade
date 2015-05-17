@@ -1,0 +1,46 @@
+extends layout
+
+block content
+    h1= title
+    p 
+       | <br> A node.js application which exposes a REST API 
+       | <br> and sends commands to clients via websocket connections.
+    // WRAPPER-LEFT
+    #wrapper-left
+
+        // CLIENTS LIST
+        h2 Discovered clients
+        #clientList
+            table
+                thead
+                    th name
+                    th ip
+                    th port
+                tbody
+        // /CLIENTS LIST
+    // /WRAPPER-LEFT
+    
+    // WRAPPER-RIGHT
+    #wrapper-right
+        // CLIENT INFO
+        #clientInfo
+            h2 Client details
+            i#status
+            p
+                strong Fullname:
+                |  <span id='clientInfoFullname'></span>
+                br
+                strong Host:
+                |  <span id='clientInfoHost'></span>
+                br
+                strong IP:
+                |  <span id='clientInfoIP'></span>
+                br
+                strong Port:
+                |  <span id='clientInfoPort'></span>
+        // /CLIENT INFO
+        button#connect(data-action='connect' disabled) Connect
+        button#update(data-action='update' disabled) Update
+        button#refresh(data-action='refresh' disabled) Refresh          
+        textarea(id='htmlInputArea', placeholder='Type here the HTML content to post.' disabled)
+    // /WRAPPER-RIGHT
