@@ -4,34 +4,58 @@ by [Toma Popov] (https://github.com/e2l3n/WirelessAppUpdate)
 ## Index
 
 1. [Description](#1-description)
-2. [Setup and Installation](#2-Setup and Installation)
-3. [License](#6-license)
+2. [Setup and Installation](#2-setup and installation)
+3. [Known Issues](#3-issues)
+4. [License](#4-license)
 
 ## 1. Description
-A client-server architecture that allows clients to be refreshed upon command sent by the server. 
-
-###Client side (mobile app)
-A hybrid mobile application (created via Apache Cordova) that hosts a simple HTML page. Part of the client side code is abstracted in a reusable cordova plugin.
-* Compatible with [Cordova Plugman](https://github.com/apache/cordova-plugman).
-Upon start the app broadcasts its presence using the native mDNS service and advertises itses as a service . The app then starts listening on specific port for socket connections initiated by the server.
+A client-server architecture that allows control over iOS hybrid mobile apps using the [Communicator](https://github.com/agnat/node_mdns) plugin.
 
 ###Server side
-The server is an <i>express</i> app which exposes REST API and provides a simple UI built with <i>jade</i> framework for sending commands to clients. Upon start the server begings browsing all services on the local network and lists all available clients. 
-<br>The REST API has the following routes:
-* /update - updates the index.html page of the mobile app with the posted content</i>
-* /refresh - refreshes the web view in order to see the updated content</i>
-* /clients/discoverd - a list of all discovered clients</i>
+The server is an Express app written in node.js and javascript. It exposes REST API and provides a simple UI built with jade framework. 
+- Upon start the server begins browsing all advertised services within the particular LAN by using the [mdns](https://github.com/agnat/node_mdns) service discovery framework.  
+All available services are filtered by using a predefined service name prefix (<i>wau</i>). 
+- After successfully establishing a web socket connection, the server is able to send and receive commands. <i>Acknowledgement</i> is currently not implmented.
+- The server manages connections by storing in-memmory socket references associated to client IP addresses and ports.
 
+<br>The REST API has the following routes:
+* /clients/discoverd - get all discovered clients.</i>
+* /isconnected/ip/:ip/port/:port - check for established connection.</i>
+* /connect/ip/:ip/port/:port - connect to a client.</i>
+* /disconnect/ip/:ip/port/:port - disconnect from client.</i>
+* /update/ip/:ip/port/:port - update the index.html page of the mobile app with the posted content.</i>
+* /refresh/ip/:ip/port/:port - refresh the web view in order to see the updated content.</i>
+
+
+###Client side
+Hybrid apps are expected to use the [Communicator](https://github.com/e2l3n/Communicator) plugin.
+- The client UI allows users to manipulate connections and send commands over to connected hybrid mobile apps. 
+- The input area’s purpose is to allow users to send HTML data over to connected .
+- By clicking the ‘Update’ button, the input is being sent to the connected hybrid app, the app is expected to store locally the data.
+- By clicking the ‘Refresh’ button, a refresh command is sent to the other side. Hybrid apps using the <i>Communicator</i> Apache Cordova plugin refresh the current web view on screen.
 
 ## 2. Setup and Installation
 
 ### Prerequisites:
 
-* Machine running on Mac OS with installed node.js and apache cordova. 
+* Machine running on Mac OS or Linux with installed node.js. 
 
-### Automatically (CLI / Plugman)
+### Usage:
 
-## 3. License
+<p>To run the server open ‘Terminal’ application and go to the root project directory. Execute the following command:</p>
+
+<pre><code>npm start</code></pre>
+
+<p>If server is to be started under Linux environment, before executing the aforementioned command execute the following:</p>
+
+<pre><code>npm install mdns</code></pre>
+
+
+## 3. Known Issues
+
+- Connections are established only for IP v.4 addresses.
+
+## 4. License
 
 [The MIT License (MIT)](http://www.opensource.org/licenses/mit-license.html)
 
