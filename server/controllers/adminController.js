@@ -23,9 +23,9 @@ function displayClients() {
         type: 'GET',
         url: urlAddr
     }).done(function(response) {
-        availableClients = response.result;
+        availableClients = response.result.clients;
         // For each item in JSON, add a table row and cells to the content string
-        $.each(response.result, function() {
+        $.each(availableClients, function() {
             htmlContent += '<tr>';
             htmlContent += '<td><a href="#" class="linkshowdetails" rel="' + this.addresses[0] + '">' + this.name + '</a></td>';
             htmlContent += '<td>' + this.addresses[0] + '</td>';
@@ -35,6 +35,7 @@ function displayClients() {
 
         // Inject the whole content string into our existing HTML table
         $('#clientList table tbody').html(htmlContent);
+		$("#prefix").text("Service prefix filter: " + response.result.service_prefix);
     });
 
     $("#connect").prop("disabled", true);
@@ -52,13 +53,14 @@ function showClientInfo(event) {
     }).indexOf(thisIPAddress);
     // Get client object
     var thisClientObject = availableClients[arrayPosition];
+	//Update interaction ability
+	$("#connect").prop("disabled", !thisClientObject.addresses[0] || !thisClientObject.port);
     //Populate info box
     $('#clientInfoFullname').text(thisClientObject.fullname);
     $('#clientInfoHost').text(thisClientObject.host);
     $('#clientInfoIP').text(thisClientObject.addresses[0]);
     $('#clientInfoPort').text('' + thisClientObject.port);
     //Update buttons state appropriately.
-    $("#connect").prop("disabled", false);
     var urlAddr = generalIPPortURL('isconnected');
     $.ajax({
         type: 'GET',
@@ -111,7 +113,7 @@ $('button#connect').click(function() {
         if (!response.error || response.error == '') {} else {}
     }).complete(function(xhr, status) {
         // Check for a successful (blank) response
-        if (xhr.status == 200) {
+         if (xhr.status == 200) {
             $("#status").text(shouldConnect ? 'Connected.' : 'Not connected.');
             $("#htmlInputArea").prop("disabled", !shouldConnect);
             if (shouldConnect) {
@@ -121,11 +123,15 @@ $('button#connect').click(function() {
             }
             $("#refresh").prop("disabled", !shouldConnect);
             $("#connect").html(shouldConnect ? 'Disconnet' : 'Connect');
-        } else {
+         } else {
             $("#status").text(shouldConnect ? 'Not connected.' : 'Connected.');
-            $("#htmlInputArea").prop("disabled", !shouldConnect);
-            $("#refresh").prop("disabled", !shouldConnect);
-            $("#update").prop("disabled", !shouldConnect);
+            $("#htmlInputArea").prop("disabled", shouldConnect);
+            $("#refresh").prop("disabled", shouldConnect);
+            if (shouldConnect) {
+ 				$("#update").prop("disabled", true);
+            } else {
+   	            $("#htmlInputArea").keyup(); //trigger keyup() event in order to update the 'update' button state appropriately
+            }
             $("#connect").html(shouldConnect ? 'Connect' : 'Disconnect');
         }
     });

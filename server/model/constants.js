@@ -4,7 +4,7 @@
 
 //Public section
 module.exports = {
-	kServicePrefix: '',
+	kServicePrefix: 'wau',
 	kServerPort: 3001,
 	kCommandRefresh: 'WAURefresh',
 	kCommandUpdate: 'WAUUpdate',
