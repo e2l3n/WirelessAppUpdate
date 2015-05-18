@@ -69,7 +69,7 @@ function showClientInfo(event) {
         // Check for a successful (blank) response
         if (!response.error || response.error == '') {} else {}
     }).complete(function(xhr, status) {
-        // Check for a successful (blank) response
+        // Check for a successful (blank) response and update client info appropriately.
         if (xhr.status == 200) {
             $("#status").text('Connected.');
             $("#htmlInputArea").prop("disabled", false);

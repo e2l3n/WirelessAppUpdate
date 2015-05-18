@@ -23,6 +23,10 @@ router.get('/discovered', function(req, res) {
     }
 });
 
+/*
+	GET check if client is connected.
+*/
+
 router.get('/isconnected/ip/:ip/port/:port', function(req, res) {
     var ip = req.params.ip;
     var port = req.params.port;
@@ -39,6 +43,10 @@ router.get('/isconnected/ip/:ip/port/:port', function(req, res) {
         res.send(generateResponse(null, 'Not found.'));
     }
 });
+
+/*
+	GET initiate a new connection.
+*/
 
 router.get('/connect/ip/:ip/port/:port', function(req, res) {
     var ip = req.params.ip;
@@ -82,6 +90,10 @@ router.get('/connect/ip/:ip/port/:port', function(req, res) {
     }
 });
 
+/*
+	GET dsiconnect client.
+*/
+
 router.get('/disconnect/ip/:ip/port/:port', function(req, res) {
     var ip = req.params.ip;
     var port = req.params.port;
@@ -114,6 +126,10 @@ router.get('/disconnect/ip/:ip/port/:port', function(req, res) {
 	}
 });
 
+/*
+	POST send data to client.
+*/
+
 router.post('/update/ip/:ip/port/:port', function(req, res) {
     var ip = req.params.ip;
     var port = req.params.port;
@@ -145,6 +161,10 @@ router.post('/update/ip/:ip/port/:port', function(req, res) {
         res.send(generateResponse(null, error == null ? error : 'Failed send html.'));
     });
 });
+
+/*
+	GET trigger refresh on client side.
+*/
 
 router.get('/refresh/ip/:ip/port/:port', function(req, res) {
     var ip = req.params.ip;
