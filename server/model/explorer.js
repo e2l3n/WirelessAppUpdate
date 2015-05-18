@@ -5,10 +5,18 @@ var constants = require('./constants');
 
 // Import mdns  module
 var mdns = require('mdns');
+
 // advertise the server /testing purposes only/
-var ad = mdns.createAdvertisement(mdns.tcp('http'), constants.kServerPort);
-ad.start();
-// watch available services
+
+//var ad = mdns.createAdvertisement(mdns.tcp('http'), constants.kServerPort);
+//ad.start();
+
+/*
+  On ‘serviceUp’ event attempt to filter the IP addresses array
+  by preserving IPv.4 address types only. In case this is not possible 
+  then leave the array as is. The current server version is compatible with IPv.4 only.
+*/
+
 var browser = mdns.createBrowser(mdns.tcp('http'));
 browser.on('serviceUp', function(service) {
     console.log("service up: ", service);
@@ -37,8 +45,6 @@ browser.on('serviceUp', function(service) {
     discovered_clients.pushIfNotExist(service, function(existingElem) {
         return existingElem.name === service.name;
     });
-
-
 });
 
 browser.on('serviceDown', function(service) {
