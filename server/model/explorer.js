@@ -16,30 +16,23 @@ var mdns = require('mdns');
   by preserving IPv.4 address types only. In case this is not possible 
   then leave the array as is. The current server version is compatible with IPv.4 only.
 */
+var default_sequence = [
+    mdns.rst.DNSServiceResolve(), 
+	mdns.rst.DNSServiceGetAddrInfo(),
+	mdns.rst.makeAddressesUnique()
+];
 
-var browser = mdns.createBrowser(mdns.tcp('http'));
+var browser = mdns.createBrowser(mdns.tcp('http'), default_sequence);
 browser.on('serviceUp', function(service) {
     console.log("service up: ", service);
     if (!service.name.hasPrefix(constants.kServicePrefix)) {
         return;
     }
 
-    var filteredIP4Addresses = service.addresses.filter(function(ipAddr) {
-        var octets = ipAddr.split(".");
-        var block;
-        var regex = new RegExp('^[0-9]{1,3}$');
-        for (var i = 0; i < octets.length; i++) {
-            block = octets[i];
-            if (!regex.test(block)) {
-                return false;
-            }
-        }
-
-        return true;
-    });
-	// console.log('FILTERED IP Addresses : ' + filteredIP4Addresses);
-    if (filteredIP4Addresses.length > 0) {
-        service.addresses = filteredIP4Addresses;
+    var ip4Addresses = getFilteredIPAddresses(service.addresses);
+    // console.log('FILTERED IP Addresses : ' + ip4Addresses);
+    if (ip4Addresses.length > 0) {
+        service.addresses = ip4Addresses;
     }
 
     discovered_clients.pushIfNotExist(service, function(existingElem) {
@@ -54,6 +47,24 @@ browser.on('serviceDown', function(service) {
     });
 });
 
+browser.on('serviceChanged', function(service) {
+    console.log("service changed: ", service);
+    var existing = arrayUtils.findObjectInArray(discovered_clients, function(aService) {
+        if (aService.name.localeCompare(service.name) == 0) {
+            aService.name = service.name;
+            aService.port = service.port;
+            var ip4Addresses = getFilteredIPAddresses(service.addresses);
+            // console.log('FILTERED IP Addresses : ' + ip4Addresses);
+            if (ip4Addresses.length > 0) {
+                aService.addresses = ip4Addresses;
+            }
+            return true;
+        }
+
+        return false;
+    });
+});
+
 //Public methods
 module.exports = {
     startBrowsing: function() {
@@ -63,3 +74,26 @@ module.exports = {
         return discovered_clients;
     }
 };
+
+//Utilities 
+function getFilteredIPAddresses(addresses) {
+    if (!addresses || addresses.constructor !== Array) {
+        return [];
+    }
+
+    var result = addresses.filter(function(ipAddr) {
+        var octets = ipAddr.split(".");
+        var block;
+        var regex = new RegExp('^[0-9]{1,3}$');
+        for (var i = 0; i < octets.length; i++) {
+            block = octets[i];
+            if (!regex.test(block)) {
+                return false;
+            }
+        }
+
+        return true;
+    });
+
+    return result;
+}

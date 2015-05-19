@@ -30,9 +30,15 @@ router.get('/discovered', function(req, res) {
 router.get('/isconnected/ip/:ip/port/:port', function(req, res) {
     var ip = req.params.ip;
     var port = req.params.port;
-    var ws = findObjectInArray(wsList, function(socket) {
-        return socket.ip.localeCompare(ip) == 0 && socket.port.localeCompare(port) == 0;
+
+	var ws = null;
+    var index = findIndexOfObjectInArray(wsList, function(socket) {
+		return socket.ip.localeCompare(ip) === 0 && socket.port.localeCompare(port) === 0;
     });
+	
+	if (index != -1) {
+		ws = wsList[index];
+	}
 	
     if (ws && ws.socket.readyState === 1) {
         res.statusCode = 200;
@@ -59,9 +65,15 @@ router.get('/connect/ip/:ip/port/:port', function(req, res) {
         return;
     }
 	
-    var ws = findObjectInArray(wsList, function(socket) {
-        return socket.ip.localeCompare(ip) == 0 && socket.port.localeCompare(port) == 0;
+	var ws = null;
+    var index = findIndexOfObjectInArray(wsList, function(socket) {
+        return socket.ip.localeCompare(ip) === 0 && socket.port.localeCompare(port) === 0;
     });
+	
+	if (index) {
+		ws = wsList[index];
+	}
+	
     if (ws && ws.socket.readyState === 1) {
         res.statusCode = 200;
         res.setHeader('content-type', 'text/html');
@@ -86,6 +98,15 @@ router.get('/connect/ip/:ip/port/:port', function(req, res) {
         ws.socket.on('error', function(error) {
             res.statusCode = 409;
             res.send(generateResponse(null, 'Did receive error.'));
+			var index = findIndexOfObjectInArray(wsList, function(ws) {
+		        return ws.ip.localeCompare(ip) === 0 && ws.port.localeCompare(port) === 0;
+		    });
+			
+			if (index != -1) {
+				wsToTerminate = wsList[index];
+				wsToTerminate.socket.terminate();
+				wsList.splice(index, 1);
+			}
         });
     }
 });
@@ -104,18 +125,18 @@ router.get('/disconnect/ip/:ip/port/:port', function(req, res) {
         return;
     }
 
-	var foundIndex = - 1;			
-	for (i = 0; i < wsList.length; i ++) {
-		if (wsList[i].ip.localeCompare(ip) == 0 && wsList[i].port.localeCompare(port) == 0) {
-			foundIndex = i;
-			break;
-		} 
+	var wsToTerminate = null;
+	var index = findIndexOfObjectInArray(wsList, function(ws) {
+        return ws.ip.localeCompare(ip) === 0 && ws.port.localeCompare(port) === 0;
+    });
+	
+	if (index != -1) {
+		wsToTerminate = wsList[index];
 	}
 
-	if (foundIndex != -1) {
-		var wsToTerminate = wsList[foundIndex];
+	if (wsToTerminate) {
 		wsToTerminate.socket.terminate();
-		wsList.splice(foundIndex, 1);
+		wsList.splice(index, 1);
 		
         res.statusCode = 200;
         res.setHeader('content-type', 'text/html');
@@ -141,11 +162,15 @@ router.post('/update/ip/:ip/port/:port', function(req, res) {
 
         return;
     }
-
-    var ws = findObjectInArray(wsList, function(socket) {
+	var ws = null;
+    var index = findIndexOfObjectInArray(wsList, function(socket) {
         return socket.ip.localeCompare(ip) == 0 && socket.port.localeCompare(port) == 0;
     });
 	
+	if (index != -1) {
+		ws = wsList[index];
+	}
+		
     if (!ws || ws.socket.readyState != 1) {
         res.statusCode = 500;
         res.send(generateResponse(null, 'No socket connection available.'));
@@ -176,9 +201,14 @@ router.get('/refresh/ip/:ip/port/:port', function(req, res) {
         return;
     }
 
-    var ws = findObjectInArray(wsList, function(socket) {
+	var ws = null;
+    var index = findIndexOfObjectInArray(wsList, function(socket) {
         return socket.ip.localeCompare(ip) == 0 && socket.port.localeCompare(port) == 0;
     });
+
+	if (index != -1) {
+		ws = wsList[index];
+	}
 
     if (!ws || ws.socket.readyState !== 1) {
         res.statusCode = 500;
@@ -221,15 +251,14 @@ function generateWSObject(ip, port) {
     };
 }
 
-function findObjectInArray(array, comparer) {
+function findIndexOfObjectInArray(array, comparer) {
     for (var i = 0; i < array.length; i++) {
         if (comparer(array[i])) {
-            return array[i];
+            return i;
         }
     }
 
-    return null;
+    return -1;
 }
-
 
 module.exports = router;
