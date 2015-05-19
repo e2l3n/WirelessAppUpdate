@@ -30,7 +30,7 @@ All available services are filtered by using a predefined service name prefix (<
 ###Client side
 Hybrid apps are expected to use the [Communicator](https://github.com/e2l3n/Communicator) plugin.
 - The client UI allows users to manipulate connections and send commands over to connected hybrid mobile apps. 
-- The input area’s purpose is to allow users to send HTML data over to connected .
+- The input area’s purpose is to allow users to send HTML data over to connected hybrid apps.
 - By clicking the ‘Update’ button, the input is being sent to the connected hybrid app, the app is expected to store locally the data.
 - By clicking the ‘Refresh’ button, a refresh command is sent to the other side. Hybrid apps using the <i>Communicator</i> Apache Cordova plugin refresh the current web view on screen.
 
